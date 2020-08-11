@@ -1,9 +1,10 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:movie_preview/commons/assets.dart';
-import 'package:movie_preview/models/provider/media.dart';
+import 'package:movie_preview/models/view/home.dart';
 import 'package:movie_preview/ui/components/appbar_title.dart';
+import 'package:movie_preview/ui/components/bottom_navbar.dart';
+import 'package:movie_preview/ui/components/dummy.dart';
 import 'package:movie_preview/ui/components/searchbar.dart';
+import 'package:movie_preview/ui/components/titleview.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -12,49 +13,46 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
-  TabController _tabController;
-  int _currentIndex;
-  MediaNotifier provider;
+  HomeView view;
 
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 3, vsync: this);
-    _currentIndex = 0;
-  }
-
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    provider = Provider.of<MediaNotifier>(context);
-    precacheImage(MyAssets.avatarImage, context);
-  }
-
-  void dispose() {
-    super.dispose();
-    _tabController.dispose();
-    provider.dispose();
-  }
-
-  List<Widget> _getButtons(List<String> labels) {
+  List<Widget> _buildButtonBar(List<String> labels) {
     List<Widget> _buttons = <Widget>[];
     for (var i = 0; i < labels.length; i++) {
-      final bool isButtonSelected = _tabController.index == i;
+      final bool isButtonSelected = view.tabIndex == i;
       final _textStyle = TextStyle(
-          color: isButtonSelected ? Colors.pink : Colors.grey,
+          color: isButtonSelected ? Colors.white : Colors.grey,
           fontSize: isButtonSelected ? 14 : 12);
+      final Color _buttonColor =
+          isButtonSelected ? Colors.pink : Colors.grey.shade900;
       final _padding = isButtonSelected
-          ? const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10)
+          ? const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10)
           : EdgeInsets.zero;
-      Widget child = FlatButton(
-        onPressed: () {
-          setState(() {
-            _tabController.index = i;
-          });
-        },
-        child: Padding(
-          padding: _padding,
-          child: Text(
-            labels[i],
-            style: _textStyle,
+      Widget child = Container(
+        padding: isButtonSelected ? const EdgeInsets.all(8) : EdgeInsets.zero,
+        decoration: !isButtonSelected
+            ? null
+            : BoxDecoration(
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                    color: Colors.pink.withOpacity(0.1),
+                    blurRadius: 20,
+                    spreadRadius: 1,
+                    offset: Offset(0, 0),
+                  ),
+                ],
+              ),
+        child: FlatButton(
+          onPressed: () {
+            view.setTabIndex(i);
+          },
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          color: _buttonColor,
+          child: Padding(
+            padding: _padding,
+            child: Text(
+              labels[i],
+              style: _textStyle,
+            ),
           ),
         ),
       );
@@ -63,57 +61,65 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     return _buttons;
   }
 
+  void initState() {
+    super.initState();
+  }
+
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    view = Provider.of<HomeView>(context);
+  }
+
+  void dispose() {
+    super.dispose();
+    view.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final List<Widget> tabChildren = [
+      TitleView(),
+      TitleView(),
+      Dummy('Music'),
+    ];
+
+    final Widget home = Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: ButtonBar(
+            alignment: MainAxisAlignment.center,
+            layoutBehavior: ButtonBarLayoutBehavior.constrained,
+            children: _buildButtonBar(['Movies', 'Shows', 'Music']),
+          ),
+        ),
+        tabChildren[view.tabIndex],
+      ],
+    );
+
+    final List<Widget> children = <Widget>[
+      home,
+      Dummy('star'),
+      Dummy('bookmark'),
+      Dummy('star')
+    ];
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 80,
+        automaticallyImplyLeading: false,
         title: AppbarTitle(),
         actions: [
           SearchBar(),
         ],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ButtonBar(
-            children: _getButtons(['Movies', 'Shows', 'Music']),
-          ),
-          TabBarView(
-            controller: _tabController,
-            children: [
-              Text('Movies'),
-              Text('Shows'),
-              Text('Music'),
-            ],
-          ),
-        ],
+      body: children[view.bottomBarIndex],
+      endDrawer: Drawer(
+        child: Dummy('Drawer'),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        showUnselectedLabels: false,
-        showSelectedLabels: false,
-        selectedFontSize: 14,
-        unselectedFontSize: 14,
-        type: BottomNavigationBarType.fixed,
-        onTap: (int i) => setState(() {
-          _currentIndex = i;
-        }),
-        items: {
-          'home': Icons.home,
-          'star': EvaIcons.star,
-          'bookmark': EvaIcons.bookmark,
-          'menu': EvaIcons.menu
-        }
-            .map((k, v) => MapEntry(
-                k,
-                BottomNavigationBarItem(
-                  icon: Icon(v),
-                  title: Text(k),
-                )))
-            .values
-            .toList(),
-      ),
+      bottomNavigationBar: MyBottomNavigationBar(),
     );
   }
 }
