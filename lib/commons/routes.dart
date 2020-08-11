@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart' show CupertinoPageRoute;
 import 'package:flutter/material.dart' show MaterialPageRoute;
 import 'package:flutter/widgets.dart';
+import 'package:movie_preview/models/provider/media.dart';
+import 'package:provider/provider.dart';
 
 import '../ui/screens/home.dart';
 
@@ -21,6 +23,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
     case RouteNames.RootRoute:
     default:
-      return wrapPageRoute(HomeScreen());
+      return wrapPageRoute(
+        ChangeNotifierProvider(
+          create: (_) => MediaNotifier(),
+          child: HomeScreen(),
+        ),
+      );
   }
 }

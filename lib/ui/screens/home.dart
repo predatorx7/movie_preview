@@ -1,8 +1,10 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_preview/commons/assets.dart';
+import 'package:movie_preview/models/provider/media.dart';
 import 'package:movie_preview/ui/components/appbar_title.dart';
 import 'package:movie_preview/ui/components/searchbar.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -12,6 +14,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   TabController _tabController;
   int _currentIndex;
+  MediaNotifier provider;
 
   void initState() {
     super.initState();
@@ -21,12 +24,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   void didChangeDependencies() {
     super.didChangeDependencies();
+    provider = Provider.of<MediaNotifier>(context);
     precacheImage(MyAssets.avatarImage, context);
   }
 
   void dispose() {
     super.dispose();
     _tabController.dispose();
+    provider.dispose();
   }
 
   List<Widget> _getButtons(List<String> labels) {
@@ -40,7 +45,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           ? const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10)
           : EdgeInsets.zero;
       Widget child = FlatButton(
-        onPressed: () {},
+        onPressed: () {
+          setState(() {
+            _tabController.index = i;
+          });
+        },
         child: Padding(
           padding: _padding,
           child: Text(
@@ -63,25 +72,21 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         actions: [
           SearchBar(),
         ],
-        // TODO Add button bar
-        // bottom: TabBar(
-        //   indicatorSize: TabBarIndicatorSize.tab,
-        //   controller: _tabController,
-        //   labelColor: Colors.white,
-        //   unselectedLabelColor: Colors.grey,
-        //   labelStyle: Theme.of(context).textTheme.button,
-        //   indicator: null,
-        //   indicatorPadding: EdgeInsets.zero,
-        //   indicatorColor: Colors.transparent,
-        //   tabs: _getButtons(['Movies', 'Shows', 'Music']),
-        // ),
       ),
-      body: TabBarView(
-        controller: _tabController,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('Movies'),
-          Text('Shows'),
-          Text('Music'),
+          ButtonBar(
+            children: _getButtons(['Movies', 'Shows', 'Music']),
+          ),
+          TabBarView(
+            controller: _tabController,
+            children: [
+              Text('Movies'),
+              Text('Shows'),
+              Text('Music'),
+            ],
+          ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
