@@ -49,3 +49,14 @@ final ThemeData themeData = ThemeData(
     ),
   ),
 );
+
+final BoxDecoration boxDecorationWithPinkShadow = BoxDecoration(
+  boxShadow: <BoxShadow>[
+    BoxShadow(
+      color: Colors.pink.withOpacity(0.1),
+      blurRadius: 20,
+      spreadRadius: 1,
+      offset: Offset(0, 0),
+    ),
+  ],
+);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movie_preview/commons/styles.dart';
 import 'package:movie_preview/models/provider/media.dart';
 import 'package:movie_preview/models/view/home.dart';
 import 'package:movie_preview/ui/components/appbar_title.dart';
@@ -19,10 +20,13 @@ class _HomeScreenState extends State<HomeScreen> {
   HomeView view;
   Loading loadingDialog = Loading();
 
+  /// creates a list of Buttons where selected button is emphasized with
+  /// a unique style, size, color & padding
   List<Widget> _buildButtonBar(List<String> labels) {
     List<Widget> _buttons = <Widget>[];
     for (var i = 0; i < labels.length; i++) {
       final bool isButtonSelected = view.tabIndex == i;
+      // use a white label with a bigger fontSize if button is selected, else keep it grey & smaller size
       final _textStyle = TextStyle(
           color: isButtonSelected ? Colors.white : Colors.grey,
           fontSize: isButtonSelected ? 14 : 12);
@@ -33,20 +37,10 @@ class _HomeScreenState extends State<HomeScreen> {
           : EdgeInsets.zero;
       Widget child = Container(
         padding: isButtonSelected ? const EdgeInsets.all(8) : EdgeInsets.zero,
-        decoration: !isButtonSelected
-            ? null
-            : BoxDecoration(
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                    color: Colors.pink.withOpacity(0.1),
-                    blurRadius: 20,
-                    spreadRadius: 1,
-                    offset: Offset(0, 0),
-                  ),
-                ],
-              ),
+        decoration: !isButtonSelected ? null : boxDecorationWithPinkShadow,
         child: FlatButton(
           onPressed: () {
+            // on tap, change current tab index to this button's index
             view.setTabIndex(i);
           },
           padding: EdgeInsets.symmetric(horizontal: 16),
@@ -68,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      // Show loading before data is loaded;
+      // Show loading dialog before data is loaded;
       loadingDialog.show(context);
     });
     var provider = Provider.of<MediaProvider>(context, listen: false);
@@ -76,6 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
       loadingDialog.hide();
     });
     provider.onError((_) {
+      // either the timer ran out or an unexpected exception was thrown (404 maybe)
       Toast.show("Could not load data", context,
           duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
     });
@@ -90,6 +85,8 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
     view.dispose();
     loadingDialog = null;
+    // dispose repository and media provider
+    Provider.of<MediaProvider>(context, listen: false).dispose();
   }
 
   @override

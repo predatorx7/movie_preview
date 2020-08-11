@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:movie_preview/models/plain/media.dart';
 import 'package:movie_preview/models/provider/media.dart';
-import 'package:movie_preview/ui/components/loading.dart';
+import 'package:movie_preview/ui/components/media_cover.dart';
+import 'package:movie_preview/ui/screens/movie_details.dart';
 import 'package:provider/provider.dart';
 
 class MediasView extends StatelessWidget {
@@ -44,21 +45,9 @@ class MediasView extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
                 Media media = data[index];
-                Widget child = Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
-                  child: Container(
-                    width: _mediaWidth,
-                    decoration: BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.circular(4),
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        alignment: Alignment.center,
-                        image: NetworkImage(media.poster),
-                      ),
-                    ),
-                  ),
+                Widget child = MediaCover(
+                  width: _mediaWidth,
+                  media: media,
                 );
                 if (showLabel ?? false) {
                   child = Stack(
@@ -79,7 +68,20 @@ class MediasView extends StatelessWidget {
                     ],
                   );
                 }
-                return child;
+                return InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Provider<Media>.value(
+                          value: media,
+                          child: MovieDetails(),
+                        ),
+                      ),
+                    );
+                  },
+                  child: child,
+                );
               },
             ),
           ),
