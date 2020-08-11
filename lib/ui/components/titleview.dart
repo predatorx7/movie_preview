@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movie_preview/models/plain/media.dart';
 import 'package:movie_preview/models/provider/media.dart';
+import 'package:movie_preview/ui/components/loading.dart';
 import 'package:provider/provider.dart';
 
 class MediasView extends StatelessWidget {
@@ -49,6 +50,7 @@ class MediasView extends StatelessWidget {
                   child: Container(
                     width: _mediaWidth,
                     decoration: BoxDecoration(
+                      color: Colors.grey,
                       borderRadius: BorderRadius.circular(4),
                       image: DecorationImage(
                         fit: BoxFit.cover,
@@ -90,7 +92,7 @@ class MediasView extends StatelessWidget {
 class TitleView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<MediaNotifier>(
+    return Consumer<MediaProvider>(
       builder: (context, value, child) {
         final List<Media> data = value.data;
         return Expanded(

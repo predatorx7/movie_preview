@@ -27,10 +27,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return wrapPageRoute(
         MultiProvider(
           providers: [
-            ChangeNotifierProvider(
-              create: (_) => MediaNotifier(),
+            ChangeNotifierProvider<MediaProvider>(
+              create: (_) => MediaProvider(),
             ),
-            ChangeNotifierProvider(
+            ChangeNotifierProvider<HomeView>(
               create: (_) => HomeView(0, 0),
             ),
           ],

@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:movie_preview/models/provider/media.dart';
 import 'package:movie_preview/models/view/home.dart';
 import 'package:movie_preview/ui/components/appbar_title.dart';
 import 'package:movie_preview/ui/components/bottom_navbar.dart';
 import 'package:movie_preview/ui/components/dummy.dart';
+import 'package:movie_preview/ui/components/loading_dialog.dart';
 import 'package:movie_preview/ui/components/searchbar.dart';
 import 'package:movie_preview/ui/components/titleview.dart';
 import 'package:provider/provider.dart';
+import 'package:toast/toast.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen> {
   HomeView view;
+  Loading loadingDialog = Loading();
 
   List<Widget> _buildButtonBar(List<String> labels) {
     List<Widget> _buttons = <Widget>[];
@@ -63,6 +67,18 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      // Show loading before data is loaded;
+      loadingDialog.show(context);
+    });
+    var provider = Provider.of<MediaProvider>(context, listen: false);
+    provider.onInitialData(() {
+      loadingDialog.hide();
+    });
+    provider.onError((_) {
+      Toast.show("Could not load data", context,
+          duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+    });
   }
 
   void didChangeDependencies() {
@@ -73,6 +89,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   void dispose() {
     super.dispose();
     view.dispose();
+    loadingDialog = null;
   }
 
   @override
@@ -80,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     final List<Widget> tabChildren = [
       TitleView(),
       TitleView(),
-      Dummy('Music'),
+      Expanded(child: Dummy('Music')),
     ];
 
     final Widget home = Column(

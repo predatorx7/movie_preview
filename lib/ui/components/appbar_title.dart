@@ -10,14 +10,15 @@ class AppbarTitle extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
           child: CircleAvatar(
+            backgroundColor: Colors.grey,
             backgroundImage: MyAssets.avatarImage,
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(2.0),
-          child: Text(user, style: Theme.of(context).textTheme.bodyText2),
+          padding: const EdgeInsets.all(4.0),
+          child: Text(user, style: Theme.of(context).textTheme.subtitle2),
         ),
       ],
     );

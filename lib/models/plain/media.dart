@@ -1,12 +1,13 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:string_validator/string_validator.dart';
+import 'package:equatable/equatable.dart';
 
 part 'media.g.dart';
 
 enum MediaType { movie, series, music }
 
 @JsonSerializable(nullable: false)
-class Media {
+class Media extends Equatable {
   @JsonKey(name: 'Title')
   final String title;
   @JsonKey(name: 'Year')
@@ -26,4 +27,7 @@ class Media {
 
   factory Media.fromJson(Map<String, dynamic> json) => _$MediaFromJson(json);
   Map<String, dynamic> toJson() => _$MediaToJson(this);
+
+  @override
+  List<Object> get props => [title, year, imdbID, poster];
 }

@@ -19,6 +19,8 @@ class MediaApiClient {
     http.Client client,
     Duration timeoutDuration,
   ]) async {
+    DateTime requestTime = DateTime.now();
+    print('[MediaApiClient] fetch call requested at $requestTime');
     client ??= http.Client();
 
     http.Response response;
@@ -28,6 +30,8 @@ class MediaApiClient {
             timeoutDuration ?? Duration(seconds: 10),
           );
       client.close();
+      Duration _durationElapsed = DateTime.now().difference(requestTime);
+      print('[MediaApiClient] fetch completed in $_durationElapsed');
     } on TimeoutException {
       rethrow;
     } catch (e) {

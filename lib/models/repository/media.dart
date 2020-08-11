@@ -14,10 +14,10 @@ class MediaRepository {
   static MediaRepository _cache;
 
   /// Asynchronusly create a media repository & update it's [media].
-  static Future<MediaRepository> create() async {
+  static Future<MediaRepository> create(bool update) async {
     if (_cache != null) return _cache;
     _cache = MediaRepository._();
-    await _cache.update();
+    if (update) await _cache.update();
     return _cache;
   }
 
@@ -49,7 +49,7 @@ class MediaRepository {
     _media = await fetch();
   }
 
-  void _fetchDataForStream(_) async {
+  Future<void> _fetchDataForStream(_) async {
     final _data = await fetch().catchError((_) {
       _controller.addError(_);
     });
@@ -93,10 +93,12 @@ class MediaRepository {
     _controller = null;
   }
 
-  /// The stream this repository is controlling.
-  ///
-  /// Make sure that stream is initialized with [initialize]
-  Stream<List<Media>> get stream => _controller?.stream;
+  /// Initializes & returns the stream controller.
+  Stream<List<Media>> getStream(Duration duration) {
+    initialize(duration);
+    _fetchDataForStream(null);
+    return _controller?.stream;
+  }
 
   /// The stream controller responsible for managing streams in this repository
   StreamController<List<Media>> get streamController => _controller;

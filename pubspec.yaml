@@ -28,6 +28,8 @@ dependencies:
   json_annotation: ^3.0.1
   http: ^0.12.2
   string_validator: ^0.1.4
+  toast: ^0.1.5
+  equatable: ^1.2.3
 
 dev_dependencies:
   flutter_test:

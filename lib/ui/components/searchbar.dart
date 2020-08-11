@@ -16,7 +16,7 @@ class SearchBar extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(6.0),
               child: Icon(
                 EvaIcons.search,
                 color: Colors.grey,
