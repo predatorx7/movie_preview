@@ -1,16 +1,15 @@
 # movie_preview
 
-A new Flutter project.
+A flutter project to show movie details with flutter API integration
 
-## Getting Started
+## Preview
 
-This project is a starting point for a Flutter application.
+<img src='https://github.com/predatorx7/movie_preview/blob/master/result_preview/preview_1.png'  width="400">
 
-A few resources to get you started if this is your first Flutter project:
+## Working
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+MaterialApp uses routes generated from [generateRoute method](https://github.com/predatorx7/movie_preview/blob/15ce35b88c96eb45ea6835ed00305246b7b3b3c1/lib/commons/routes.dart#L23) and themes from [themeData in lib/commons/styles.dart](https://github.com/predatorx7/movie_preview/blob/15ce35b88c96eb45ea6835ed00305246b7b3b3c1/lib/commons/styles.dart#L3)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+[Media](https://github.com/predatorx7/movie_preview/blob/15ce35b88c96eb45ea6835ed00305246b7b3b3c1/lib/models/plain/media.dart#L10) is the plain model class for json data recieved from the API. The raw json response is parsed by the [MediaRepository](https://github.com/predatorx7/movie_preview/blob/master/lib/models/repository/media.dart) which stores list of [Media](https://github.com/predatorx7/movie_preview/blob/15ce35b88c96eb45ea6835ed00305246b7b3b3c1/lib/models/plain/media.dart#L10)
+
+Application uses stream controller from [MediaRepository](https://github.com/predatorx7/movie_preview/blob/master/lib/models/repository/media.dart) to update & make api calls using the [MediaAPIClient](https://github.com/predatorx7/movie_preview/blob/master/lib/api/client.dart).
