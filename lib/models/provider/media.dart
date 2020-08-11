@@ -5,9 +5,7 @@ import 'package:movie_preview/models/repository/media.dart';
 class MediaNotifier extends ChangeNotifier {
   MediaRepository _repository;
 
-  List<Media> _data;
-
-  List<Media> get data => _data;
+  List<Media> get data => _repository?.media ?? <Media>[];
 
   MediaNotifier() {
     _init();
@@ -15,7 +13,6 @@ class MediaNotifier extends ChangeNotifier {
 
   void _init() async {
     _repository = await MediaRepository.create();
-    _data = _repository.media;
     _repository.initialize(Duration(seconds: 30));
     _repository.stream.listen(_updateOnData);
   }
@@ -24,17 +21,16 @@ class MediaNotifier extends ChangeNotifier {
   void dispose() {
     super.dispose();
     _repository.dispose();
-    _data = null;
   }
 
-  void refresh() async {
-    _repository.update();
-    _data = _repository.media;
+  /// Asynchronously update data & notify listeners
+  Future<void> refresh() async {
+    await _repository.update();
     notifyListeners();
   }
 
+  /// Updates state on stream data
   void _updateOnData(List<Media> data) {
-    _data = data;
     notifyListeners();
   }
 
