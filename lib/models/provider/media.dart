@@ -38,12 +38,12 @@ class MediaProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void Function() _onInitialDataCallback;
+  void Function() _onDataCallback;
   void Function(dynamic _) _onErrorCallback;
 
-  /// Will be called if data was previously null but the latest recieved stream has data.
-  void onInitialData(void Function() callback) {
-    _onInitialDataCallback = callback;
+  /// Will be called if the latest recieved stream has data.
+  void onData(void Function() callback) {
+    _onDataCallback = callback;
   }
 
   /// Will be called if stream has an error.
@@ -51,17 +51,21 @@ class MediaProvider extends ChangeNotifier {
     _onErrorCallback = callback;
   }
 
+  bool _hadError = false;
+
   void _onErrorStream(dynamic _) {
+    _hadError = true;
     if (_onErrorCallback != null) _onErrorCallback(_);
   }
 
   /// Updates state on stream data
   void _updateOnData(List<Media> data) {
     final bool _hasData = data != null;
-    if (!_hadData && _hasData && _onInitialDataCallback != null) {
-      _onInitialDataCallback();
+    if (/*!_hadData && */ _hasData && _onDataCallback != null) {
+      _onDataCallback();
     }
     _hadData = _hasData;
+    _hadError = false;
     notifyListeners();
   }
 

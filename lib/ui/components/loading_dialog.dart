@@ -50,5 +50,6 @@ class Loading {
       return;
     }
     Navigator.of(_dialogcontext).pop();
+    _dialogcontext = null;
   }
 }

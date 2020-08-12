@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:collection/collection.dart';
 import 'package:http/http.dart' as http show Client;
 import 'package:movie_preview/api/client.dart';
 import 'package:movie_preview/models/plain/media.dart';
@@ -49,11 +50,20 @@ class MediaRepository {
     _media = await fetch();
   }
 
+  Function eq = const ListEquality().equals;
+
   Future<void> _fetchDataForStream(_) async {
     final _data = await fetch().catchError((_) {
       _controller.addError(_);
     });
-    if (_oldDate != _data) {
+
+    if (_data == null) {
+      _controller.addError(Exception('[MediaRepository] Data is null'));
+      return;
+    }
+
+    if (!eq(_oldDate, _data)) {
+      // if old and new lists are not equal
       _oldDate = _data;
       _media = _oldDate;
       _controller.add(_oldDate);

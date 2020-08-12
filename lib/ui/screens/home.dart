@@ -5,11 +5,11 @@ import 'package:movie_preview/models/view/home.dart';
 import 'package:movie_preview/ui/components/appbar_title.dart';
 import 'package:movie_preview/ui/components/bottom_navbar.dart';
 import 'package:movie_preview/ui/components/dummy.dart';
+import 'package:movie_preview/ui/components/error_snackbar.dart';
 import 'package:movie_preview/ui/components/loading_dialog.dart';
 import 'package:movie_preview/ui/components/searchbar.dart';
 import 'package:movie_preview/ui/components/titleview.dart';
 import 'package:provider/provider.dart';
-import 'package:toast/toast.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -19,6 +19,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   HomeView view;
   Loading loadingDialog = Loading();
+  GlobalKey<ScaffoldState> key = GlobalKey<ScaffoldState>();
 
   /// creates a list of Buttons where selected button is emphasized with
   /// a unique style, size, color & padding
@@ -59,20 +60,34 @@ class _HomeScreenState extends State<HomeScreen> {
     return _buttons;
   }
 
+  void _showErrorScaffold() {
+    key.currentState.showSnackBar(
+      ErrorSnackBar(),
+    );
+  }
+
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       // Show loading dialog before data is loaded;
       loadingDialog.show(context);
+      // To avoid loading dialog not getting dismissed, we must call Loading.hide() after a while
+      Future.delayed(Duration(seconds: 15), () {
+        loadingDialog.hide();
+      });
     });
     var provider = Provider.of<MediaProvider>(context, listen: false);
-    provider.onInitialData(() {
+    // If application life cycle changes, the state update could be skipped
+    // and the loading dialog will not hide but the stream may keep running.
+    //
+    // To avoid loading dialog not getting dismissed, we must call Loading.hide() everytime
+    // we recieve data as a workaround for not using life cycle manager
+    provider.onData(() {
       loadingDialog.hide();
     });
     provider.onError((_) {
       // either the timer ran out or an unexpected exception was thrown (404 maybe)
-      Toast.show("Could not load data", context,
-          duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+      _showErrorScaffold();
     });
   }
 
@@ -121,6 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
 
     return Scaffold(
+      key: key,
       appBar: AppBar(
         toolbarHeight: 80,
         automaticallyImplyLeading: false,
