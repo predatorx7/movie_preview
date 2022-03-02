@@ -38,7 +38,6 @@ class ShowsProvider extends ValueNotifier<List<Shows>?> {
   /// Asynchronously update data & notify listeners
   Future<void> refresh() async {
     await _repository?.update();
-    notifyListeners();
   }
 
   void Function()? _onDataCallback;
@@ -63,7 +62,7 @@ class ShowsProvider extends ValueNotifier<List<Shows>?> {
     if (_onDataCallback != null) {
       _onDataCallback!();
     }
-    value = _repository?.media;
+    value = data;
     notifyListeners();
   }
 }

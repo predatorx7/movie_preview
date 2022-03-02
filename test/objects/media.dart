@@ -9,7 +9,7 @@ import '../err_utils.dart';
 void mediaJsonTest() {
   final Shows media = Shows(
     title: 'Teen Titans GO! to the Movies',
-    year: '2018',
+    year: 2018,
     imdbID: 'tt7424200',
     type: MediaType.movie,
     poster:
@@ -37,7 +37,7 @@ void mediaJsonTest() {
     expect(() {
       Shows _ = Shows(
           title: 'Teen Titans GO! to the Movies',
-          year: '2018',
+          year: 2018,
           imdbID: 'tt7424200',
           type: MediaType.movie,
           poster: 'invalid-html');
@@ -46,7 +46,7 @@ void mediaJsonTest() {
   test('equality of Media objects', () {
     final Shows anotherMedia = Shows(
       title: 'Some movie',
-      year: '2019',
+      year: 2019,
       imdbID: 'tt7424201',
       type: MediaType.movie,
       poster:

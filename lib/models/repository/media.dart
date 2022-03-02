@@ -19,10 +19,6 @@ class MediaRepository {
     return value;
   }
 
-  List<Shows>? _media = <Shows>[];
-
-  List<Shows>? get media => _media;
-
   /// fetches response from api client & creates a list of [Shows].
   static Future<List<Shows>?> fetch([
     http.Client? client,
@@ -46,7 +42,7 @@ class MediaRepository {
 
   /// Updates [media] with data fetched from the api client
   Future<void> update() async {
-    _media = await fetch();
+    _fetchDataForStream(null);
   }
 
   Function eq = const ListEquality().equals;
@@ -64,7 +60,6 @@ class MediaRepository {
     if (!eq(_oldDate, _data)) {
       // if old and new lists are not equal
       _oldDate = _data;
-      _media = _oldDate;
       _controller?.add(_oldDate);
     }
   }

@@ -8,15 +8,15 @@ enum MediaType { movie, series, music }
 
 @JsonSerializable()
 class Shows extends Equatable {
-  @JsonKey(name: 'Title')
+  @JsonKey(name: 'Tite')
   final String? title;
   @JsonKey(name: 'Year')
-  final String? year;
+  final int? year;
   @JsonKey(name: 'imdbID')
   final String? imdbID;
   @JsonKey(name: 'Type')
   final MediaType? type;
-  @JsonKey(name: 'Poster')
+  @JsonKey(name: 'Postr')
   final String? poster;
 
   Shows({
@@ -30,8 +30,8 @@ class Shows extends Equatable {
         assert(poster?.isNotEmpty ?? false),
         assert(isURL(poster ?? ''));
 
-  factory Shows.fromJson(Map<String, dynamic> json) => _$MediaFromJson(json);
-  Map<String, dynamic> toJson() => _$MediaToJson(this);
+  factory Shows.fromJson(Map<String, dynamic> json) => _$ShowsFromJson(json);
+  Map<String, dynamic> toJson() => _$ShowsToJson(this);
 
   @override
   List<Object?> get props => [
