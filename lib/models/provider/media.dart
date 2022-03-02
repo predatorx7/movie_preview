@@ -3,8 +3,7 @@ import 'package:movie_preview/models/plain/media.dart';
 import 'package:movie_preview/models/repository/media.dart';
 
 class MediaProvider extends ChangeNotifier {
-  MediaRepository _repository;
-  bool _hadData = false;
+  MediaRepository? _repository;
 
   List<Media> get data => _repository?.media ?? <Media>[];
 
@@ -22,24 +21,24 @@ class MediaProvider extends ChangeNotifier {
   Future<void> _init() async {
     _repository = await MediaRepository.create(false);
     _repository
-        .getStream(Duration(seconds: 30))
+        ?.getStream(const Duration(seconds: 30))
         .listen(_updateOnData, onError: _onErrorStream);
   }
 
   @override
   void dispose() {
     super.dispose();
-    _repository.dispose();
+    _repository?.dispose();
   }
 
   /// Asynchronously update data & notify listeners
   Future<void> refresh() async {
-    await _repository.update();
+    await _repository?.update();
     notifyListeners();
   }
 
-  void Function() _onDataCallback;
-  void Function(dynamic _) _onErrorCallback;
+  void Function()? _onDataCallback;
+  void Function(dynamic _)? _onErrorCallback;
 
   /// Will be called if the latest recieved stream has data.
   void onData(void Function() callback) {
@@ -51,21 +50,15 @@ class MediaProvider extends ChangeNotifier {
     _onErrorCallback = callback;
   }
 
-  bool _hadError = false;
-
   void _onErrorStream(dynamic _) {
-    _hadError = true;
-    if (_onErrorCallback != null) _onErrorCallback(_);
+    if (_onErrorCallback != null) _onErrorCallback!(_);
   }
 
   /// Updates state on stream data
   void _updateOnData(List<Media> data) {
-    final bool _hasData = data != null;
-    if (/*!_hadData && */ _hasData && _onDataCallback != null) {
-      _onDataCallback();
+    if (_onDataCallback != null) {
+      _onDataCallback!();
     }
-    _hadData = _hasData;
-    _hadError = false;
     notifyListeners();
   }
 

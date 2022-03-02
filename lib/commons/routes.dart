@@ -22,7 +22,7 @@ PageRoute wrapPageRoute(Widget screen, [bool useCupertinoPageRoute = true]) {
 /// Generates Routes which will be used in the application
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
-    case RouteNames.RootRoute:
+    case RouteNames.rootRoute:
     default:
       return wrapPageRoute(
         MultiProvider(
@@ -34,7 +34,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
               create: (_) => HomeView(0, 0),
             ),
           ],
-          child: HomeScreen(),
+          child: const HomeScreen(),
         ),
       );
   }

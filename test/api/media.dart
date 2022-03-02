@@ -9,7 +9,7 @@ import 'package:movie_preview/api/client.dart';
 import 'package:movie_preview/models/plain/media.dart';
 import 'package:movie_preview/models/repository/media.dart';
 
-final _responseMap = const {
+const _responseMap = {
   "Search": [
     {
       "Title": "Teen Titans GO! to the Movies",
@@ -55,14 +55,17 @@ class MockClient extends Mock implements http.Client {
 }
 
 void mediaApiClientTest() {
-  MockClient _client;
+  MockClient? _mockClient;
   setUpAll(() {
-    _client = MockClient();
+    _mockClient = MockClient();
   });
   tearDownAll(() {
-    _client = null;
+    _mockClient?.close();
+    _mockClient = null;
   });
   test('makes successful api calls', () async {
+    final _client = _mockClient!;
+
     // A successful mocked response
     when(_client.get(MediaApiClient.url, headers: MediaApiClient.headers))
         .thenAnswer(_client.fetchSuccessful);
@@ -70,11 +73,13 @@ void mediaApiClientTest() {
 
     expect(x, isA<List<Media>>());
     expect(x?.isNotEmpty, true);
-    expect(x.length, equals(2));
+    expect(x?.length, equals(2));
   });
 
   test('throws an HttpException if the http call completes with an error',
       () async {
+    final _client = _mockClient!;
+
     // Returns an unsuccessful response
     when(_client.get(MediaApiClient.url, headers: MediaApiClient.headers))
         .thenAnswer(_client.fetchNotFound);
@@ -85,7 +90,8 @@ void mediaApiClientTest() {
   test(
       'throws a TimeoutException if the async http call takes more time then the timeout duration',
       () async {
-    final Duration timeoutDuration = Duration(seconds: 1);
+    final _client = _mockClient!;
+    const Duration timeoutDuration = Duration(seconds: 1);
     final Duration delayDuration = timeoutDuration * 2;
     // Returns an successful response but delayed
     when(_client.get(MediaApiClient.url, headers: MediaApiClient.headers))

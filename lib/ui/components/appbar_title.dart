@@ -4,13 +4,15 @@ import 'package:movie_preview/commons/assets.dart';
 const user = 'Chelsie Brett';
 
 class AppbarTitle extends StatelessWidget {
+  const AppbarTitle({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
           child: CircleAvatar(
             backgroundColor: Colors.grey,
             backgroundImage: MyAssets.avatarImage,

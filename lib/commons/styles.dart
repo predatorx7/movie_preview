@@ -1,31 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 final ThemeData themeData = ThemeData(
   brightness: Brightness.dark,
   primarySwatch: Colors.pink,
   visualDensity: VisualDensity.adaptivePlatformDensity,
   scaffoldBackgroundColor: Colors.black,
-  buttonColor: Colors.pink,
   buttonTheme: ButtonThemeData(
     textTheme: ButtonTextTheme.primary,
-    padding: EdgeInsets.all(8),
+    padding: const EdgeInsets.all(8),
     buttonColor: Colors.pink,
     disabledColor: Colors.grey[900],
     splashColor: Colors.pink[400],
   ),
-  appBarTheme: AppBarTheme(
+  appBarTheme: const AppBarTheme(
     elevation: 0,
-    brightness: Brightness.dark,
     color: Colors.transparent,
     shadowColor: Colors.transparent,
+    systemOverlayStyle: SystemUiOverlayStyle.light,
   ),
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: Colors.grey.shade900,
       elevation: 0,
       showSelectedLabels: false,
       showUnselectedLabels: false,
-      selectedIconTheme: IconThemeData(color: Colors.pinkAccent),
-      unselectedIconTheme: IconThemeData(color: Colors.grey)),
+      selectedIconTheme: const IconThemeData(color: Colors.pinkAccent),
+      unselectedIconTheme: const IconThemeData(color: Colors.grey)),
   cardColor: Colors.grey,
   cardTheme: CardTheme(
     shadowColor: Colors.transparent,
@@ -34,7 +34,7 @@ final ThemeData themeData = ThemeData(
       borderRadius: BorderRadius.circular(10),
     ),
   ),
-  textTheme: TextTheme(
+  textTheme: const TextTheme(
     headline6: TextStyle(
       color: Colors.white,
       fontWeight: FontWeight.bold,
@@ -56,7 +56,7 @@ final BoxDecoration boxDecorationWithPinkShadow = BoxDecoration(
       color: Colors.pink.withOpacity(0.1),
       blurRadius: 20,
       spreadRadius: 1,
-      offset: Offset(0, 0),
+      offset: const Offset(0, 0),
     ),
   ],
 );

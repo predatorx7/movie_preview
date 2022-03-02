@@ -11,11 +11,13 @@ class MediasView extends StatelessWidget {
   final double size;
   final bool showLabel;
 
-  const MediasView(this.label, this.data,
-      {Key key, this.size = 13, this.showLabel})
-      : assert(label != null && data != null),
-        assert(size != null),
-        super(key: key);
+  const MediasView(
+    this.label,
+    this.data, {
+    Key? key,
+    this.size = 13,
+    this.showLabel = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -49,20 +51,22 @@ class MediasView extends StatelessWidget {
                   width: _mediaWidth,
                   media: media,
                 );
-                if (showLabel ?? false) {
+                if (showLabel) {
                   child = Stack(
                     alignment: Alignment.bottomCenter,
                     children: [
                       child,
                       Container(
-                        padding: EdgeInsets.all(4),
+                        padding: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(4),
                           color: Colors.green,
                         ),
                         child: Text(
                           _label,
-                          style: textStyle.copyWith(fontSize: 10),
+                          style: textStyle?.merge(
+                            const TextStyle(fontSize: 10),
+                          ),
                         ),
                       ),
                     ],
@@ -75,7 +79,7 @@ class MediasView extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (context) => Provider<Media>.value(
                           value: media,
-                          child: MovieDetails(),
+                          child: const MovieDetails(),
                         ),
                       ),
                     );
@@ -92,6 +96,8 @@ class MediasView extends StatelessWidget {
 }
 
 class TitleView extends StatelessWidget {
+  const TitleView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Consumer<MediaProvider>(

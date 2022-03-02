@@ -12,14 +12,15 @@ import 'package:movie_preview/ui/components/titleview.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  HomeView view;
+  late HomeView view;
   Loading loadingDialog = Loading();
-  GlobalKey<ScaffoldState> key = GlobalKey<ScaffoldState>();
 
   /// creates a list of Buttons where selected button is emphasized with
   /// a unique style, size, color & padding
@@ -39,15 +40,16 @@ class _HomeScreenState extends State<HomeScreen> {
       Widget child = Container(
         padding: isButtonSelected ? const EdgeInsets.all(8) : EdgeInsets.zero,
         decoration: !isButtonSelected ? null : boxDecorationWithPinkShadow,
-        child: FlatButton(
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: _buttonColor,
+          ),
           onPressed: () {
             // on tap, change current tab index to this button's index
             view.setTabIndex(i);
           },
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          color: _buttonColor,
           child: Padding(
-            padding: _padding,
+            padding: _padding.add(const EdgeInsets.symmetric(horizontal: 16)),
             child: Text(
               labels[i],
               style: _textStyle,
@@ -61,18 +63,19 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _showErrorScaffold() {
-    key.currentState.showSnackBar(
-      ErrorSnackBar(),
+    ScaffoldMessenger.of(context).showSnackBar(
+      const ErrorSnackBar(),
     );
   }
 
+  @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    Future.microtask(() {
       // Show loading dialog before data is loaded;
       loadingDialog.show(context);
       // To avoid loading dialog not getting dismissed, we must call Loading.hide() after a while
-      Future.delayed(Duration(seconds: 15), () {
+      Future.delayed(const Duration(seconds: 15), () {
         loadingDialog.hide();
       });
     });
@@ -91,25 +94,26 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     view = Provider.of<HomeView>(context);
   }
 
+  @override
   void dispose() {
     super.dispose();
     view.dispose();
-    loadingDialog = null;
-    // dispose repository and media provider
-    Provider.of<MediaProvider>(context, listen: false).dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final List<Widget> tabChildren = [
-      TitleView(),
-      TitleView(),
-      Expanded(child: Dummy('Music')),
+      const TitleView(),
+      const TitleView(),
+      const Expanded(
+        child: Dummy('Music'),
+      ),
     ];
 
     final Widget home = Column(
@@ -130,26 +134,25 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final List<Widget> children = <Widget>[
       home,
-      Dummy('star'),
-      Dummy('bookmark'),
-      Dummy('star')
+      const Dummy('star'),
+      const Dummy('bookmark'),
+      const Dummy('star')
     ];
 
     return Scaffold(
-      key: key,
       appBar: AppBar(
         toolbarHeight: 80,
         automaticallyImplyLeading: false,
-        title: AppbarTitle(),
-        actions: [
+        title: const AppbarTitle(),
+        actions: const [
           SearchBar(),
         ],
       ),
       body: children[view.bottomBarIndex],
-      endDrawer: Drawer(
+      endDrawer: const Drawer(
         child: Dummy('Drawer'),
       ),
-      bottomNavigationBar: MyBottomNavigationBar(),
+      bottomNavigationBar: const MyBottomNavigationBar(),
     );
   }
 }

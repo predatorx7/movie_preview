@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 /// A reusable, modal dialog
 class Loading {
-  BuildContext _dialogcontext;
+  BuildContext? _dialogcontext;
 
   /// Shows a modal dialog representing loading
   show(BuildContext context) {
@@ -25,12 +24,12 @@ class Loading {
               alignment: Alignment.center,
               child: ConstrainedBox(
                 constraints: BoxConstraints.tight(
-                  Size.fromRadius(60),
+                  const Size.fromRadius(60),
                 ),
                 child: Material(
                   color: Colors.black.withOpacity(0.6),
                   borderRadius: BorderRadius.circular(25),
-                  child: Center(
+                  child: const Center(
                     child: CircularProgressIndicator(
                       strokeWidth: 6,
                     ),
@@ -46,10 +45,11 @@ class Loading {
 
   /// Dismisses the dialog created by this Object
   void hide() {
-    if (_dialogcontext == null) {
+    final context = _dialogcontext;
+    if (context == null) {
       return;
     }
-    Navigator.of(_dialogcontext).pop();
+    Navigator.of(context).pop();
     _dialogcontext = null;
   }
 }

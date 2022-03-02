@@ -4,12 +4,14 @@ import 'package:movie_preview/ui/components/media_cover.dart';
 import 'package:provider/provider.dart';
 
 class MovieDetails extends StatelessWidget {
+  const MovieDetails({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final Media media = Provider.of<Media>(context);
-    final double scale = 1;
-    final double height = 200 * scale;
-    final double width = 120 * scale;
+    const double scale = 1;
+    const double height = 200 * scale;
+    const double width = 120 * scale;
     return Scaffold(
       appBar: AppBar(),
       body: Center(
@@ -19,18 +21,18 @@ class MovieDetails extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: EdgeInsets.all(16),
-              child: Text(media.title),
+              padding: const EdgeInsets.all(16),
+              child: Text(media.title ?? ''),
             ),
             Container(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               height: height,
               child: MediaCover(
                 media: media,
                 width: width,
               ),
             ),
-            Expanded(
+            const Expanded(
               child: SizedBox(),
             )
           ],

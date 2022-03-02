@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 class CircularLoading extends StatelessWidget {
   final bool useScaffold;
   final bool useWhiteBackground;
-  final double value;
+  final double? value;
   const CircularLoading({
-    Key key,
+    Key? key,
     this.useScaffold = true,
     this.useWhiteBackground = true,
     this.value,
@@ -23,7 +23,7 @@ class CircularLoading extends StatelessWidget {
       child = Scaffold(body: child);
     } else if (useWhiteBackground) {
       child = DecoratedBox(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.white,
         ),
         child: child,
@@ -31,8 +31,7 @@ class CircularLoading extends StatelessWidget {
     }
     return Theme(
       data: ThemeData(
-        accentColor: Colors.lightGreenAccent,
-        backgroundColor: Colors.lightGreen,
+        primarySwatch: Colors.lightGreen,
         scaffoldBackgroundColor: Colors.yellow,
       ),
       child: child,

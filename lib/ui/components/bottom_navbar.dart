@@ -4,7 +4,7 @@ import 'package:movie_preview/models/view/home.dart';
 import 'package:provider/provider.dart';
 
 class MyBottomNavigationBar extends StatelessWidget {
-  const MyBottomNavigationBar({Key key}) : super(key: key);
+  const MyBottomNavigationBar({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var _homeView = Provider.of<HomeView>(context);
@@ -28,12 +28,15 @@ class MyBottomNavigationBar extends StatelessWidget {
         'bookmark': EvaIcons.bookmark,
         'menu': EvaIcons.menu
       }
-          .map((k, v) => MapEntry(
+          .map(
+            (k, v) => MapEntry(
               k,
               BottomNavigationBarItem(
                 icon: Icon(v),
-                title: Text(k),
-              )))
+                label: k,
+              ),
+            ),
+          )
           .values
           .toList(),
     );

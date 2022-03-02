@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 class ErrorSnackBar extends SnackBar {
-  ErrorSnackBar()
+  const ErrorSnackBar({Key? key})
       : super(
+          key: key,
           backgroundColor: Colors.red,
-          content: Text(
+          content: const Text(
             'Could not load data',
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),

@@ -6,8 +6,19 @@ class MediaApiClient {
   // This class is not meant to be instantiated.
   MediaApiClient._();
 
-  // omdbAPI url
-  static const url = 'http://www.omdbapi.com/?s=Movies&apikey=5661d041';
+  /// omdbAPI's GET url
+  ///
+  /// SAME AS
+  /// ```dart
+  /// Uri.https(
+  ///  'www.omdbapi.com',
+  ///  '/',
+  ///  {'s': 'Movies', 'apikey': '5661d041'},
+  /// );
+  /// ```
+  static final url = Uri.parse(
+    'https://www.omdbapi.com/?s=Movies&apikey=5661d041',
+  );
 
   static const Map<String, String> headers = {
     HttpHeaders.acceptHeader: 'application/json',
@@ -16,8 +27,8 @@ class MediaApiClient {
 
   /// Sends an HTTP GET request to the Restful API [url] and returns the response body.
   static Future<String> fetch([
-    http.Client client,
-    Duration timeoutDuration,
+    http.Client? client,
+    Duration? timeoutDuration,
   ]) async {
     DateTime requestTime = DateTime.now();
     print('[MediaApiClient] fetch call requested at $requestTime');
@@ -27,9 +38,8 @@ class MediaApiClient {
 
     try {
       response = await client.get(url, headers: headers).timeout(
-            timeoutDuration ?? Duration(seconds: 10),
+            timeoutDuration ?? const Duration(seconds: 10),
           );
-      client.close();
       Duration _durationElapsed = DateTime.now().difference(requestTime);
       print('[MediaApiClient] fetch completed in $_durationElapsed');
     } on TimeoutException {
@@ -46,7 +56,8 @@ class MediaApiClient {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       throw HttpException(
-          'Failed GET response with status code ${response.statusCode} with reason ${response.reasonPhrase}');
+        'Failed GET response with status code ${response.statusCode} with reason ${response.reasonPhrase}',
+      );
     }
   }
 }

@@ -6,9 +6,11 @@ class MediaCover extends StatelessWidget {
   final Media media;
 
   /// Displays a poster of the [Media]
-  const MediaCover({Key key, this.width, @required this.media})
-      : assert(media != null),
-        super(key: key);
+  const MediaCover({
+    Key? key,
+    required this.width,
+    required this.media,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,7 @@ class MediaCover extends StatelessWidget {
           image: DecorationImage(
             fit: BoxFit.cover,
             alignment: Alignment.center,
-            image: NetworkImage(media.poster),
+            image: NetworkImage(media.poster ?? ''),
           ),
         ),
       ),
