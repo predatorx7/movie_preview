@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movie_preview/commons/styles.dart';
-import 'package:movie_preview/models/provider/media.dart';
-import 'package:movie_preview/models/view/home.dart';
+import 'package:movie_preview/models/provider/shows.dart';
+import 'package:movie_preview/models/notifiers/home.dart';
 import 'package:movie_preview/ui/components/appbar_title.dart';
 import 'package:movie_preview/ui/components/bottom_navbar.dart';
 import 'package:movie_preview/ui/components/dummy.dart';
@@ -19,11 +19,11 @@ class HomeScreen extends StatefulWidget {
   static Widget onNavigate() {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<MediaProvider>(
-          create: (_) => MediaProvider(),
+        ChangeNotifierProvider<ShowsProvider>(
+          create: (_) => ShowsProvider(),
         ),
-        ChangeNotifierProvider<HomeView>(
-          create: (_) => HomeView(0, 0),
+        ChangeNotifierProvider<TabIndexNotifier>(
+          create: (_) => TabIndexNotifier(0, 0),
         ),
       ],
       child: const HomeScreen(),
@@ -35,7 +35,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late HomeView view;
+  late TabIndexNotifier view;
   Loading loadingDialog = Loading();
 
   /// creates a list of Buttons where selected button is emphasized with
@@ -95,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
         loadingDialog.hide();
       });
     });
-    var provider = Provider.of<MediaProvider>(context, listen: false);
+    var provider = Provider.of<ShowsProvider>(context, listen: false);
     // If application life cycle changes, the state update could be skipped
     // and the loading dialog will not hide but the stream may keep running.
     //
@@ -113,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    view = Provider.of<HomeView>(context);
+    view = Provider.of<TabIndexNotifier>(context);
   }
 
   @override

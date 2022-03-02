@@ -1,13 +1,14 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:movie_preview/models/view/home.dart';
+import 'package:movie_preview/models/notifiers/home.dart';
 import 'package:provider/provider.dart';
 
 class MyBottomNavigationBar extends StatelessWidget {
   const MyBottomNavigationBar({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    var _homeView = Provider.of<HomeView>(context);
+    var _homeView = Provider.of<TabIndexNotifier>(context);
+
     return BottomNavigationBar(
       currentIndex: _homeView.bottomBarIndex,
       showUnselectedLabels: false,
@@ -22,23 +23,24 @@ class MyBottomNavigationBar extends StatelessWidget {
           Scaffold.of(context).openEndDrawer();
         }
       },
-      items: {
-        'home': Icons.home,
-        'star': EvaIcons.star,
-        'bookmark': EvaIcons.bookmark,
-        'menu': EvaIcons.menu
-      }
-          .map(
-            (k, v) => MapEntry(
-              k,
-              BottomNavigationBarItem(
-                icon: Icon(v),
-                label: k,
-              ),
-            ),
-          )
-          .values
-          .toList(),
+      items: const [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: 'home',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(EvaIcons.star),
+          label: 'star',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(EvaIcons.bookmark),
+          label: 'bookmark',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(EvaIcons.menu),
+          label: 'menu',
+        ),
+      ],
     );
   }
 }

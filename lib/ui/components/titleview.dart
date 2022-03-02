@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:movie_preview/models/plain/media.dart';
-import 'package:movie_preview/models/provider/media.dart';
+import 'package:movie_preview/models/provider/shows.dart';
 import 'package:movie_preview/ui/components/media_cover.dart';
 import 'package:movie_preview/ui/screens/movie_details.dart';
 import 'package:provider/provider.dart';
 
 class MediasView extends StatelessWidget {
-  final List<Media> data;
+  final List<Shows> data;
   final String label;
   final double size;
   final bool showLabel;
@@ -48,7 +48,7 @@ class MediasView extends StatelessWidget {
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
-                Media media = data[index];
+                Shows media = data[index];
                 Widget child = MediaCover(
                   width: _mediaWidth,
                   media: media,
@@ -79,7 +79,7 @@ class MediasView extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => Provider<Media>.value(
+                        builder: (context) => Provider<Shows>.value(
                           value: media,
                           child: const MovieDetails(),
                         ),
@@ -102,9 +102,9 @@ class TitleView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MediaProvider>(
+    return Consumer<ShowsProvider>(
       builder: (context, value, child) {
-        final List<Media>? data = value.data;
+        final List<Shows>? data = value.data;
         if (data == null) {
           return const Center(
             child: Text('Something went wrong'),

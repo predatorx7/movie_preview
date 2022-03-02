@@ -3,9 +3,9 @@ import 'package:movie_preview/models/plain/media.dart';
 
 class MediaCover extends StatelessWidget {
   final double width;
-  final Media media;
+  final Shows media;
 
-  /// Displays a poster of the [Media]
+  /// Displays a poster of the [Shows]
   const MediaCover({
     Key? key,
     required this.width,

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:http/http.dart' as http show Client;
-import 'package:movie_preview/api/client.dart';
+import 'package:movie_preview/services/show.dart';
 import 'package:movie_preview/models/plain/media.dart';
 
 /// A repository that periodically updates data and adds it to a stream
@@ -19,29 +19,29 @@ class MediaRepository {
     return value;
   }
 
-  List<Media>? _media = <Media>[];
+  List<Shows>? _media = <Shows>[];
 
-  List<Media>? get media => _media;
+  List<Shows>? get media => _media;
 
-  /// fetches response from api client & creates a list of [Media].
-  static Future<List<Media>?> fetch([
+  /// fetches response from api client & creates a list of [Shows].
+  static Future<List<Shows>?> fetch([
     http.Client? client,
     Duration? timeoutDuration,
   ]) async {
     final String _response =
-        await MediaApiClient.fetch(client, timeoutDuration);
+        await ShowsService.fetch(client, timeoutDuration);
     final Map<String, dynamic> _responseJson = json.decode(_response);
     final List<dynamic> _mediaMap = _responseJson['Search'] as List<dynamic>;
-    final List<Media> _media = <Media>[];
+    final List<Shows> _media = <Shows>[];
     for (final element in _mediaMap) {
-      _media.add(Media.fromJson(element));
+      _media.add(Shows.fromJson(element));
     }
     return _media;
   }
 
-  StreamController<List<Media>>? _controller;
+  StreamController<List<Shows>>? _controller;
   Timer? _timer;
-  List<Media> _oldDate = [];
+  List<Shows> _oldDate = [];
   Duration _interval = Duration.zero;
 
   /// Updates [media] with data fetched from the api client
@@ -77,7 +77,7 @@ class MediaRepository {
   /// Initializes stream controller.
   void initialize(Duration interval) {
     _interval = interval;
-    _controller = StreamController<List<Media>>(
+    _controller = StreamController<List<Shows>>(
         onListen: startStream,
         onPause: stopStream,
         onResume: startStream,
@@ -103,12 +103,12 @@ class MediaRepository {
   }
 
   /// Initializes & returns the stream controller.
-  Stream<List<Media>> getStream(Duration duration) {
+  Stream<List<Shows>> getStream(Duration duration) {
     initialize(duration);
     _fetchDataForStream(null);
     return _controller!.stream;
   }
 
   /// The stream controller responsible for managing streams in this repository
-  StreamController<List<Media>>? get streamController => _controller;
+  StreamController<List<Shows>>? get streamController => _controller;
 }

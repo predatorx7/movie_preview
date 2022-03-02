@@ -8,7 +8,7 @@ class MovieDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Media media = Provider.of<Media>(context);
+    final Shows media = Provider.of<Shows>(context);
     const double scale = 1;
     const double height = 200 * scale;
     const double width = 120 * scale;

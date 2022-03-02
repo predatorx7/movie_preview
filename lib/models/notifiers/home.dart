@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 
-class HomeView with ChangeNotifier {
-  HomeView(int tabIndex, int bottomIndex)
+class TabIndexNotifier with ChangeNotifier {
+  TabIndexNotifier(int tabIndex, int bottomIndex)
       : _tabIndex = tabIndex,
         _bottomBarIndex = bottomIndex;
 

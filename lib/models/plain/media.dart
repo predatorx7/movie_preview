@@ -7,7 +7,7 @@ part 'media.g.dart';
 enum MediaType { movie, series, music }
 
 @JsonSerializable()
-class Media extends Equatable {
+class Shows extends Equatable {
   @JsonKey(name: 'Title')
   final String? title;
   @JsonKey(name: 'Year')
@@ -19,7 +19,7 @@ class Media extends Equatable {
   @JsonKey(name: 'Poster')
   final String? poster;
 
-  Media({
+  Shows({
     this.title,
     this.year,
     this.imdbID,
@@ -30,7 +30,7 @@ class Media extends Equatable {
         assert(poster?.isNotEmpty ?? false),
         assert(isURL(poster ?? ''));
 
-  factory Media.fromJson(Map<String, dynamic> json) => _$MediaFromJson(json);
+  factory Shows.fromJson(Map<String, dynamic> json) => _$MediaFromJson(json);
   Map<String, dynamic> toJson() => _$MediaToJson(this);
 
   @override

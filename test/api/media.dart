@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http show Client, Response;
 import 'package:mockito/mockito.dart';
 
 import 'package:mockito/annotations.dart';
-import 'package:movie_preview/api/client.dart';
+import 'package:movie_preview/services/show.dart';
 import 'package:movie_preview/models/plain/media.dart';
 import 'package:movie_preview/models/repository/media.dart';
 
@@ -40,7 +40,7 @@ class MockDataProvider {
   /// A successful [http.Response]
   static Future<http.Response> fetchSuccessful(Invocation _) async {
     final String testValue = json.encode(_responseMap);
-    return http.Response(testValue, 200, headers: MediaApiClient.headers);
+    return http.Response(testValue, 200, headers: ShowsService.headers);
   }
 
   /// A successful [http.Response] but delayed
@@ -48,14 +48,14 @@ class MockDataProvider {
       Invocation _, Duration duration) async {
     await Future.delayed(duration);
     final String testValue = json.encode(_responseMap);
-    return http.Response(testValue, 200, headers: MediaApiClient.headers);
+    return http.Response(testValue, 200, headers: ShowsService.headers);
   }
 
   /// An unsuccessful [http.Response] which throws a [HttpException] `Not Found`
   /// Exception with status code `404`
   static Future<http.Response> fetchNotFound(Invocation _) async {
     return http.Response('Not Found', 404,
-        headers: MediaApiClient.headers,
+        headers: ShowsService.headers,
         reasonPhrase: 'Mock 404 Not Found error');
   }
 }
@@ -74,11 +74,11 @@ void mediaApiClientTest() {
     final _client = _mockClient!;
 
     // A successful mocked response
-    when(_client.get(MediaApiClient.url, headers: MediaApiClient.headers))
+    when(_client.get(ShowsService.url, headers: ShowsService.headers))
         .thenAnswer(MockDataProvider.fetchSuccessful);
     var x = await MediaRepository.fetch(_client);
 
-    expect(x, isA<List<Media>>());
+    expect(x, isA<List<Shows>>());
     expect(x?.isNotEmpty, true);
     expect(x?.length, equals(2));
   });
@@ -88,7 +88,7 @@ void mediaApiClientTest() {
     final _client = _mockClient!;
 
     // Returns an unsuccessful response
-    when(_client.get(MediaApiClient.url, headers: MediaApiClient.headers))
+    when(_client.get(ShowsService.url, headers: ShowsService.headers))
         .thenAnswer(MockDataProvider.fetchNotFound);
 
     expect(
@@ -101,7 +101,7 @@ void mediaApiClientTest() {
     const Duration timeoutDuration = Duration(seconds: 1);
     final Duration delayDuration = timeoutDuration * 2;
     // Returns an successful response but delayed
-    when(_client.get(MediaApiClient.url, headers: MediaApiClient.headers))
+    when(_client.get(ShowsService.url, headers: ShowsService.headers))
         .thenAnswer(
       (_) => MockDataProvider.fetchSuccessfulDelayed(_, delayDuration),
     );

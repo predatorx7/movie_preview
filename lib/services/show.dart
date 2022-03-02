@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
-class MediaApiClient {
+class ShowsService {
   // This class is not meant to be instantiated.
-  MediaApiClient._();
+  ShowsService._();
 
   /// omdbAPI's GET url
   ///

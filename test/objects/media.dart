@@ -7,7 +7,7 @@ import 'package:movie_preview/models/plain/media.dart';
 import '../err_utils.dart';
 
 void mediaJsonTest() {
-  final Media media = Media(
+  final Shows media = Shows(
     title: 'Teen Titans GO! to the Movies',
     year: '2018',
     imdbID: 'tt7424200',
@@ -19,7 +19,7 @@ void mediaJsonTest() {
   final mediaJson = encodeToString(media);
 
   final otherMedia =
-      Media.fromJson(json.decode(mediaJson) as Map<String, dynamic>);
+      Shows.fromJson(json.decode(mediaJson) as Map<String, dynamic>);
 
   test('for Media', () {
     expect(otherMedia.imdbID, media.imdbID);
@@ -31,11 +31,11 @@ void mediaJsonTest() {
     expect(encodeToString(otherMedia), equals(mediaJson));
 
     expect(() {
-      Media();
+      Shows();
     }, throwsAssertionError);
 
     expect(() {
-      Media _ = Media(
+      Shows _ = Shows(
           title: 'Teen Titans GO! to the Movies',
           year: '2018',
           imdbID: 'tt7424200',
@@ -44,7 +44,7 @@ void mediaJsonTest() {
     }, throwsAssertionError);
   });
   test('equality of Media objects', () {
-    final Media anotherMedia = Media(
+    final Shows anotherMedia = Shows(
       title: 'Some movie',
       year: '2019',
       imdbID: 'tt7424201',
@@ -55,9 +55,9 @@ void mediaJsonTest() {
     expect(media == otherMedia, true);
     expect(media != anotherMedia, true);
 
-    final List<Media> mediaList = <Media>[media, otherMedia];
-    final List<Media> otherList = <Media>[media, otherMedia];
-    final List<Media> anotherList = <Media>[media, anotherMedia];
+    final List<Shows> mediaList = <Shows>[media, otherMedia];
+    final List<Shows> otherList = <Shows>[media, otherMedia];
+    final List<Shows> anotherList = <Shows>[media, anotherMedia];
 
     Function eq = const ListEquality().equals;
 
