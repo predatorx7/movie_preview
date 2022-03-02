@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http show Client;
 import 'package:movie_preview/api/client.dart';
 import 'package:movie_preview/models/plain/media.dart';
 
+/// A repository that periodically updates data and adds it to a stream
 class MediaRepository {
   /// Create a media repository with initial data in [media] empty.
   ///

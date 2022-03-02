@@ -12,7 +12,23 @@ import 'package:movie_preview/ui/components/titleview.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
+  static const String routeName = '/';
+
   const HomeScreen({Key? key}) : super(key: key);
+
+  static Widget onNavigate() {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<MediaProvider>(
+          create: (_) => MediaProvider(),
+        ),
+        ChangeNotifierProvider<HomeView>(
+          create: (_) => HomeView(0, 0),
+        ),
+      ],
+      child: const HomeScreen(),
+    );
+  }
 
   @override
   _HomeScreenState createState() => _HomeScreenState();

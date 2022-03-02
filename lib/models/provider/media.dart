@@ -2,10 +2,14 @@ import 'package:flutter/widgets.dart';
 import 'package:movie_preview/models/plain/media.dart';
 import 'package:movie_preview/models/repository/media.dart';
 
-class MediaProvider extends ChangeNotifier {
+class MediaProvider extends ValueNotifier<List<Media>?> {
   MediaRepository? _repository;
 
-  List<Media> get data => _repository?.media ?? <Media>[];
+  List<Media>? get data => value;
+
+  List<Media>? get newMedia => data;
+  List<Media>? get popularMedia => data;
+  List<Media>? get trendingMedia => data;
 
   /// Provides media from the repository.
   ///
@@ -14,7 +18,7 @@ class MediaProvider extends ChangeNotifier {
   ///
   /// This listens periodically for updates in data via streams from [MediaRepository] and
   /// notifies listeners if the data is new.
-  MediaProvider() {
+  MediaProvider() : super(null) {
     _init();
   }
 
@@ -59,10 +63,7 @@ class MediaProvider extends ChangeNotifier {
     if (_onDataCallback != null) {
       _onDataCallback!();
     }
+    value = _repository?.media;
     notifyListeners();
   }
-
-  List<Media> get newMedia => data;
-  List<Media> get popularMedia => data;
-  List<Media> get trendingMedia => data;
 }

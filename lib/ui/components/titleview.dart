@@ -21,6 +21,8 @@ class MediasView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (data.isEmpty) return const SizedBox();
+
     final double _mediaHeight = 16 * size;
     final double _mediaWidth = 9 * size;
     final _label = label.toUpperCase();
@@ -102,7 +104,12 @@ class TitleView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<MediaProvider>(
       builder: (context, value, child) {
-        final List<Media> data = value.data;
+        final List<Media>? data = value.data;
+        if (data == null) {
+          return const Center(
+            child: Text('Something went wrong'),
+          );
+        }
         return Expanded(
           child: ListView(
             children: [
