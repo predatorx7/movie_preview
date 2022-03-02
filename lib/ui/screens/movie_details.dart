@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:movie_preview/models/plain/media.dart';
-import 'package:movie_preview/ui/components/media_cover.dart';
 import 'package:provider/provider.dart';
 
 class MovieDetails extends StatelessWidget {
@@ -8,10 +6,7 @@ class MovieDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Shows media = Provider.of<Shows>(context);
-    const double scale = 1;
-    const double height = 200 * scale;
-    const double width = 120 * scale;
+    final show = Provider.of(context);
     return Scaffold(
       appBar: AppBar(),
       body: Center(
@@ -22,14 +17,11 @@ class MovieDetails extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.all(16),
-              child: Text(media.title ?? ''),
-            ),
-            Container(
-              padding: const EdgeInsets.all(16),
-              height: height,
-              child: MediaCover(
-                media: media,
-                width: width,
+              child: Row(
+                children: [
+                  const Text('SHOW TITLE: '),
+                  Text(show.title ?? ''),
+                ],
               ),
             ),
             const Expanded(
